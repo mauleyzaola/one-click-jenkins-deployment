@@ -1,0 +1,61 @@
+version: '3.7'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    restart: always
+    volumes:
+      - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+      - VIRTUAL_PORT=8080
+    networks:
+      - jenkins
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - conf:/etc/nginx/conf.d
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - cert:/etc/nginx/certs
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - jenkins
+  acme-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: acme-companion
+    restart: always
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+      - NGINX_DOCKER_GEN_CONTAINER=nginx-proxy
+      - NGINX_DOCKER_GEN_NETWORK=jenkins_default
+    volumes:
+      - conf:/etc/nginx/conf.d
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - cert:/etc/nginx/certs
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - nginx-proxy
+    networks:
+      - jenkins
+
+volumes:
+  jenkins_data:
+  conf:
+  vhost:
+  html:
+  cert:
+
+networks:
+  jenkins:
+    driver: bridge
