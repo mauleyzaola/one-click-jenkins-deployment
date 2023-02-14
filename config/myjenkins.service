@@ -1,0 +1,15 @@
+[Unit]
+Description=My Jenkins Service
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+ExecStartPre=/usr/bin/docker compose -f /home/ubuntu/one-click-jenkins-deployment/docker-compose.yaml down
+ExecStart=/usr/bin/docker compose -f /home/ubuntu/one-click-jenkins-deployment/docker-compose.yaml up -d
+ExecStop=/usr/bin/docker compose -f /home/ubuntu/one-click-jenkins-deployment/docker-compose.yaml down
+
+[Install]
+WantedBy=multi-user.target
