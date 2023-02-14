@@ -7,7 +7,34 @@ Simplest way of having a running Jenkins instance with NGINX and SSL certificate
 This procedure assumes you have latest docker installed on your machine. The machine should be able to resolve a domain from the Internet.
 
 ```
+cp .env-sample .env
+```
+
+Edit the environment values accordingly.
+
+```
 docker compose build
+```
+
+If you want the docker compose to run as service in Ubuntu 22.04, run these commands:
+
+```
+sudo cp config/my-jenkins.service /etc/systemd/system/my-jenkins.service
+sudo -s
+systemctl enable my-jenkins.service
+exit
+```
+
+To start the service:
+
+```
+sudo service my-jenkins start
+```
+
+To stop the service.
+
+```
+sudo service my-jenkins stop
 ```
 
 ## Docker

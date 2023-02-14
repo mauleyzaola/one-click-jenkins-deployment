@@ -7,9 +7,9 @@ After=docker.service
 Type=oneshot
 RemainAfterExit=yes
 
-ExecStartPre=/usr/bin/docker compose -f /home/ubuntu/one-click-jenkins-deployment/docker-compose.yaml down
+ExecStartPre=/usr/bin/docker compose -f /home/ubuntu/one-click-jenkins-deployment/docker-compose.yaml down --remove-orphans
 ExecStart=/usr/bin/docker compose -f /home/ubuntu/one-click-jenkins-deployment/docker-compose.yaml up -d
-ExecStop=/usr/bin/docker compose -f /home/ubuntu/one-click-jenkins-deployment/docker-compose.yaml down
+ExecStop=/usr/bin/docker compose -f /home/ubuntu/one-click-jenkins-deployment/docker-compose.yaml down --remove-orphans
 
 [Install]
 WantedBy=multi-user.target
