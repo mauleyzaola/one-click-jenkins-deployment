@@ -10,10 +10,10 @@ This procedure assumes you have latest docker installed on your machine. The mac
 cp .env-sample .env
 ```
 
-Edit the environment values accordingly.
+Edit the environment values accordingly. Then run docker compose
 
 ```
-docker compose build
+docker compose up -d && docker compose logs -f
 ```
 
 If you want the docker compose to run as service in Ubuntu 22.04, run these commands:
