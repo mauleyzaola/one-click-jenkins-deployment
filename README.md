@@ -1,52 +1,91 @@
 # One Click Jenkins Deployment
 
-## One-Click Deployment: Securely Host Jenkins with Nginx and SSL with Letsencrypt Using Docker Compose
-Are you looking to deploy a secure Jenkins instance with a proxy and SSL support? Look no further! In this tutorial, we will guide you through the process of setting up Jenkins with Nginx proxy and SSL using Letsencrypt and Docker Compose. Whether you are a developer looking to automate your CI/CD pipeline or a system administrator looking to manage your infrastructure, this tutorial has you covered. With just a few simple steps, you will be up and running with a fully-functional Jenkins instance in no time. So let's get started!
+Simplest way of having a running Jenkins instance with NGINX and SSL certificate using Let's Encrypt.
 
-Original article published in Medium: 
+## How to use
 
-https://omerkarabacak.medium.com/one-click-deployment-securely-host-jenkins-with-nginx-and-ssl-with-letsencrypt-using-docker-1303b06c3369
+This procedure assumes you have latest docker installed on your machine. The machine should be able to resolve a domain from the Internet.
 
-### Prerequisites:
-Docker and Docker Compose installed on your machine
-A domain name pointed to the server's IP address
-
-### docker-compose.yml
-In Docker Compose file, we have defined three services:
-
-**Jenkins:** This is the Jenkins container that will run the Jenkins server.
-
-**Nginx proxy:** This is the Nginx proxy container that will act as a reverse proxy for Jenkins.
-
-**Letsencrypt-nginx-proxy-companion:** This is a container that helps generate and renew SSL certificates for our domain using Letsencrypt.
-
-We have also defined some volumes and networks that will be used by the containers.
-
-### .env file
-
-Replace your-domain.com with your actual domain name:
-
-VIRTUAL_HOST=your-domain.com
-
-LETSENCRYPT_HOST=your-domain.com
-
-LETSENCRYPT_EMAIL=your@email.com
-
-## Start the containers
-Now, we can start the Jenkins, Nginx proxy, and Letsencrypt containers using the following command:
 ```
-docker-compose up -d
-```
-This will pull the required images and start the containers in the background.
-You can check the status of the containers using the following command:
-```
-docker-compose ps
+docker compose build
 ```
 
-## Get Jenkins administrator password
+## Docker
+
+This procedure is for running Jenkins standalone within a docker container, which has a bunch of advantages.
+
+Fist, we need to build a custom docker image based on Jenkins. This is needed so we can run docker from within a containerized Jenkins instance.
+
+I've had issues trying to configure plugins such as CMake. So, would rather install `make` manually myself.
+
+```
+docker build -t myjenkins -f config/docker/Dockerfile .
+```
+
+Once the docker image has been built, we can run it locally for testing all is good.
+
+```
+docker run -d --rm \
+--name jenkins \
+-p8080:8080 \
+-v /var/run/docker.sock:/var/run/docker.sock \
+-v jenkins_home:/var/jenkins_home \
+myjenkins:latest
+```
+
+## Jenkins
+
+Manage Credentials -> System -> Global Credentials -> New Credentials
+
+Add `SSH Username with Private Key`
+
+Scope: Global
+Id: `jenkins-ssh`
+Username: `mauleyzaola`
+Private key: `cat ~/.ssh/id_rsa | pbcopy`
+
+Check `Treat username as secret`
+
+```
+You're using 'Known hosts file' strategy to verify ssh host keys, but your known_hosts file does not exist, please go to 'Manage Jenkins' -> 'Configure Global Security' -> 'Git Host Key Verification Configuration' and configure host key verification.
+```
+Finally, don't forget to verify ssh host keys. Choose `Accept first connection` option from the dropdown and save.
+
+### Plugins
+
+* Basic Branch Build Strategies
+* Git
+* Go (remember the name should match with the Jenkins file pipeline -> tools)
+* Docker
+
+Need to configure `Manage Jenkins -> Nodes -> Configure Clouds` and add Docker. Use `docker` as name.
+
+Need to configure tools `http://localhost:8080/manage/configureTools/`
+
+Then configure `Go` plugin `http://localhost:8080/manage/configureTools/` name it `go`, so it matches the code in pipeline on this repo.
+
+### Configuration
+
+Make sure we use only `git` plugin and configure these values
+
+Git: Discover branches
+Git: Discover tags
+Build Strategies -> Regular Branches
+Build Strategies -> Tags
+
+Set `Ignore tags older than` to `7 days`
+
+![jenkins](assets/jenkins01.png)
+![jenkins](assets/jenkins02.png)
+![jenkins](assets/jenkins03.png)
+![jenkins](assets/jenkins04.png)
+![jenkins](assets/jenkins05.png)
+![jenkins](assets/jenkins06.png)
+![jenkins](assets/jenkins07.png)
+![jenkins](assets/jenkins08.jpg)
+
+### Jenkins Administrator Password
 
 ```
 docker exec -it jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 ```
-
-Support Medium and me :) https://omerkarabacak.medium.com/membership
