@@ -46,9 +46,7 @@ If you want the docker compose to run as service in Ubuntu 22.04, run these comm
 
 ```
 sudo cp config/my-jenkins.service /etc/systemd/system/my-jenkins.service
-sudo -s
-systemctl enable my-jenkins.service
-exit
+sudo systemctl enable my-jenkins.service
 ```
 
 To start the service:
