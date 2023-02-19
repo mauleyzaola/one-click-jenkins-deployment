@@ -2,7 +2,33 @@
 
 Simplest way of having a running Jenkins instance with NGINX and SSL certificate using Let's Encrypt.
 
+## Local Development
+
+Jenkins can run locally, pretty much the same way it runs on a real domain, but without any certificate process.
+
+To start Jenkins
+
+```
+make start
+```
+
+To stop Jenkins
+
+```
+make stop
+```
+
+To get the admin default password
+
+```
+make password
+```
+
+Jenkins HOME will be mapped to `$HOME/jenkins_home` directory.
+
 ## How to use
+
+This is for running Jenkins with a certbot generated certificate, and from a valid an existing domain.
 
 This procedure assumes you have latest docker installed on your machine. The machine should be able to resolve a domain from the Internet.
 
@@ -85,9 +111,7 @@ Finally, don't forget to verify ssh host keys. Choose `Accept first connection` 
 * Go (remember the name should match with the Jenkins file pipeline -> tools)
 * Docker
 
-Need to configure `Manage Jenkins -> Nodes -> Configure Clouds` and add Docker. Use `docker` as name.
-
-Need to configure tools `http://localhost:8080/manage/configureTools/`
+~~Need to configure `Manage Jenkins -> Nodes -> Configure Clouds` and add Docker. Use `docker` as name.~~
 
 Then configure `Go` plugin `http://localhost:8080/manage/configureTools/` name it `go`, so it matches the code in pipeline on this repo.
 
