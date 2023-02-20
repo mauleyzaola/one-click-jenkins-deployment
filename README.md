@@ -102,6 +102,12 @@ You're using 'Known hosts file' strategy to verify ssh host keys, but your known
 ```
 Finally, don't forget to verify ssh host keys. Choose `Accept first connection` option from the dropdown and save.
 
+### Github Repositories Authentication
+
+**NOTE**: Consider that using a private key with username works just fine, only be careful to use a ssh url, instead of a https one.
+
+For instance: `https://github.com/mauleyzaola/reside-utils` should be configured as `git@github.com:mauleyzaola/reside-utils.git`
+
 ### Plugins
 
 * Basic Branch Build Strategies
