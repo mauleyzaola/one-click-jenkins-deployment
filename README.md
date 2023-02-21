@@ -110,6 +110,7 @@ For instance: `https://github.com/mauleyzaola/reside-utils` should be configured
 
 ### Plugins
 
+* Blue Ocean
 * Basic Branch Build Strategies
 * Git
 * Go (remember the name should match with the Jenkins file pipeline -> tools)
