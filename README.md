@@ -106,7 +106,7 @@ Finally, don't forget to verify ssh host keys. Choose `Accept first connection` 
 
 **NOTE**: Consider that using a private key with username works just fine, only be careful to use a ssh url, instead of a https one.
 
-For instance: `https://github.com/mauleyzaola/reside-utils` should be configured as `git@github.com:mauleyzaola/reside-utils.git`
+For instance: `https://github.com/owner/whatever-repo` should be configured as `git@github.com:owner/whatever-repo.git`
 
 ### Plugins
 
@@ -115,8 +115,6 @@ For instance: `https://github.com/mauleyzaola/reside-utils` should be configured
 * Git
 * Go (remember the name should match with the Jenkins file pipeline -> tools)
 * Docker
-
-~~Need to configure `Manage Jenkins -> Nodes -> Configure Clouds` and add Docker. Use `docker` as name.~~
 
 Then configure `Go` plugin `http://localhost:8080/manage/configureTools/` name it `go`, so it matches the code in pipeline on this repo.
 
