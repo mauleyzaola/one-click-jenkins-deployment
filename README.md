@@ -115,6 +115,7 @@ For instance: `https://github.com/owner/whatever-repo` should be configured as `
 * Git
 * Go (remember the name should match with the Jenkins file pipeline -> tools)
 * Docker
+* Docker Pipeline
 
 Then configure `Go` plugin `http://localhost:8080/manage/configureTools/` name it `go`, so it matches the code in pipeline on this repo.
 
