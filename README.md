@@ -110,6 +110,8 @@ For instance: `https://github.com/mauleyzaola/reside-utils` should be configured
 
 ### Plugins
 
+TODO: https://applitools.com/blog/how-to-update-jenkins-build-status-in-github-pull-requests-step-by-step-tutorial/
+
 * Blue Ocean
 * Basic Branch Build Strategies
 * Git
